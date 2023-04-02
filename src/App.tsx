@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import './App.css';
 
 interface Age {
@@ -16,11 +14,12 @@ function App() {
   const [birthday, setBirthday] = useState<Date | undefined>(
     new Date(year, month, day)
   );
+  let monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
   useEffect(() => {
     const today = new Date();
     if (
-      day <= 31 &&
+      day <= monthDays[month - 1] &&
       day >= 1 &&
       month <= 12 &&
       month >= 1 &&
@@ -30,24 +29,46 @@ function App() {
     } else {
       setBirthday(undefined);
     }
+    if (today.getFullYear() % 4 === 0) {
+      monthDays[1] = 29;
+    } else {
+      monthDays[1] = 28;
+    }
   }, [day, month, year]);
 
   function calculate_age() {
     const now = new Date();
-    const diff_ms = now.getTime() - birthday!.getTime();
-    const age_dt = new Date(diff_ms);
-    return age_dt;
+    let currentYear = now.getFullYear();
+    let currentMonth = now.getMonth();
+    let currentDate = now.getDate();
+    const birthYear = birthday!.getFullYear();
+    const birthMonth = birthday!.getMonth();
+    const birthDate = birthday!.getDate();
+
+    if (birthDate > currentDate) {
+      currentDate = currentDate + monthDays[currentMonth - 1];
+      currentMonth = currentMonth - 1;
+    }
+    if (birthMonth > currentMonth) {
+      currentMonth = currentMonth + 12;
+      currentYear = currentYear - 1;
+    }
+    let yearAge = currentYear - birthYear;
+    let monthAge = currentMonth - birthMonth;
+    let dateAge = currentDate - birthDate;
+    let age: Age = { days: dateAge, months: monthAge, years: yearAge };
+    return age;
   }
 
   const getYearsOld = () => {
-    return birthday ? calculate_age().getUTCFullYear() - 1970 : '- -';
+    return birthday ? calculate_age().years : '- -';
   };
 
   const getMonthsOld = () => {
-    return birthday ? calculate_age().getUTCMonth() : '- -';
+    return birthday ? calculate_age().months : '- -';
   };
   const getDaysOld = () => {
-    return birthday ? calculate_age().getUTCDate() : '- -';
+    return birthday ? calculate_age().days : '- -';
   };
 
   return (
