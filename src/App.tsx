@@ -83,7 +83,6 @@ function App() {
             onChange={(e) => setDay(e.currentTarget.valueAsNumber)}
             className={birthday ? 'realDate' : 'fakeDate'}
           ></input>
-          {day}
         </div>
         <div>
           <label htmlFor="monthInput">Month</label>
@@ -94,7 +93,6 @@ function App() {
             onChange={(e) => setMonth(e.currentTarget.valueAsNumber)}
             className={birthday ? 'realDate' : 'fakeDate'}
           ></input>
-          {month}
         </div>
         <div>
           <label htmlFor="yearInput">Year</label>
@@ -105,14 +103,9 @@ function App() {
             onChange={(e) => setYear(e.currentTarget.valueAsNumber)}
             className={birthday ? 'realDate' : 'fakeDate'}
           ></input>
-          {year}
         </div>
       </div>
       <div className="age">
-        <span>
-          Your Birthday - {birthday?.getDate()} {birthday?.getMonth()}{' '}
-          {birthday?.getFullYear()}
-        </span>
         <h2>You are:</h2>
         <h2>{getYearsOld()} years</h2>
         <h2>{getMonthsOld()} months</h2>
